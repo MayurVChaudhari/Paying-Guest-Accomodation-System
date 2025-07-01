@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.css">
+    <script src="/node_modules/jquery/dist/jquery.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
+    <script>
+        $(function () {
+            $("#btnlogin").click(function () 
+            {
+                
+                var username = $("#UserNameL").val();
+                var password = $("#PasswordL").val();
+                
+                $.ajax({
+                    method: "GET",
+                    url: "http://127.0.0.1:4400/getadmin",
+                    success: function (data) 
+                    {
+                       
+                       
+                        var user=data.find(u => u.UserName == username);
+                        if (user.UserName==username && user.Password==password)
+                         {
+                    
+                            alert("login successfully");
+                            $("#UserNameL").val("");
+                            $("#PasswordL").val("");
+                            $.ajax({
+
+                                method: "GET",
+                                url: "Admindetails.html"
+                            })
+                            .then(function (respone) {
+                                    $("#admindisplay").html(respone);
+                             })
+
+
+
+                        }
+                        else 
+                        {
+                            alert("invalid UserName / password");
+                        }
+                    }
+                })
+            })
+
+        })
+    </script>
+</head>
+
+<body class="container-fluid" id="admindisplay">
+    <div class="d-flex justify-content-center mt-5 ">
+        <div style="width: 450px;" class="border border-3 p-3">
+            <dl>
+                <h2>ADMIN LOGIN</h2>
+                <dt>User Name</dt>
+                <dd class="input-group-text"><span class="bi bi-person"></span><input type="text" class="form-control"
+                        name="username1" required placeholder="Enter the username" id="UserNameL"></dd>
+
+                <dt>Password</dt>
+                <dd class=" input-group-text"><span class="bi bi-lock"></span><input type="password"
+                        class="form-control" name="password1" required placeholder="Enter the password" id="PasswordL"></dd>
+            </dl>
+            <div style="float: right;">
+                <button class="btn btn-success" id="btnlogin">Login</button>
+            </div>
+            <div style="float: left;">
+                <button class="btn btn-secondary" id="backpage">Back</button>
+            </div>
+
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,60 @@
+<script>
+  $(document).ready(function() 
+  {
+      console.log('Document ready. Loading booking details...');
+      bookingupdate();
+
+      function bookingupdate() {
+          const UserId = $.cookie("UserId");
+
+          $.ajax({
+              method: 'GET',
+              url: `http://127.0.0.1:4400/getpgbooked?UserId=${UserId}`,
+              success: function(data) {
+                  var htmlContent = '';
+                  data.bookings.forEach(function(booking) {
+                      htmlContent += `
+                          <tr>
+                              <td>${booking.PgName}</td>
+                              <td>${booking.Address}</td>
+                              <td>${booking.Location}</td>
+                              <td>${booking.Rent}</td>
+                              <td class="text-center">
+                                  Booked
+                              </td>
+                          </tr>`;
+                  });
+                  $('#booking').html(htmlContent);
+              },
+              error: function(error) {
+                  console.error('Error fetching booking details:', error);
+                  // Handle error if needed
+              }
+          });
+      }
+  });
+</script>
+<body>
+  <div class="container-fluid p-3">
+      <div class="border border-5 p-5 mx-auto" style="background-color: rgb(143, 216, 216); max-width: 1000px;">
+          <h3 class="text-center p-2 font-weight-bold" style="background-color: rgb(151, 249, 249);">
+              Booking Details 
+          </h3>
+          <br />
+          <div class="table-responsive">
+              <table class="table table-hover">
+                  <thead class="thead-light">
+                      <tr>
+                          <th>PgName</th>
+                          <th>Address</th>
+                          <th>Location</th>
+                          <th>Rent</th>
+                          <th>Status</th>
+                      </tr>
+                  </thead>
+                  <tbody id="booking" style="font-size:18px;">
+                  </tbody>
+              </table>
+          </div>
+      </div>
+  </div>

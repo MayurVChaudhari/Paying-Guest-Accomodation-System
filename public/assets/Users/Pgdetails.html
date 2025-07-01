@@ -1,0 +1,215 @@
+<script>
+
+  $(function()
+{
+  $("#book").click(function () {
+  $.ajax({
+    method: "POST",
+    url: "http://127.0.0.1:4400/BookPg",
+    data: {
+      "pgName": $.cookie("pgName"),
+      "userName": $.cookie("UserId")
+    },
+    success: function (response) {
+      $.removeCookie("pgName");
+      alert("Booked successfully");
+    },
+    error: function (xhr, status, error) {
+      console.error("Error:", error);
+      alert("Failed to submit form");
+    },
+  });
+});
+
+})
+ 
+
+ 
+</script>
+<div
+  class="d-flex justify-content-center p-5 "
+>
+  <div style="width: 800px">
+    <h2 style="text-align: center; background-color: aqua">PG details</h2>
+    <div style="background-color: rgb(255, 243, 230)" class="p-5">
+      <div class="form-group d-flex flex-row mt-5">
+        <label class="col-sm-3 control-label">PG Name</label>
+        <div class="col-sm-6">
+          <div id="pgName"  class="form-control border border-2" ></div>
+        </div>
+      </div>
+
+      <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Type of PG</label>
+        <div class="col-lg-6">
+            <label class="checkbox-inline">
+                <input type="radio" id="typepg_boys" name="typepg" value="Boys" required="true"> Boys &nbsp;&nbsp;
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" id="typepg_girls" name="typepg" value="Girls"> Girls
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" id="typepg_both" name="typepg" value="Both"> Both
+            </label>
+        </div>
+    </div>
+
+      <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess"
+          >location</label
+        >
+        <div class="col-sm-6">
+          <div id="city"  class="form-control border border-2" ></div>
+        </div>
+      </div>
+      <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label">Rent Per Month</label>
+          <div class="col-sm-6">
+            <div id="rpmonth"  class="form-control border border-2" ></div>
+          </div>
+      </div>
+      <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label">Address</label>
+          <div class="col-sm-6">
+            <div id="address"  class="form-control border border-2" ></div>
+          </div>
+      </div>
+      <hr />
+      <div class="form-group has-success d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess"
+            style="text-align: center; color: red ;font-size:25px;">Facilities</label>
+
+    </div>
+    <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Electricity</label>
+        <div class="col-lg-6">
+            <label class="checkbox-inline">
+                <input type="radio" id="electricity" name="electricity" value="Yes" required="true"> Yes
+                &nbsp;&nbsp;
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" id="Electricity" name="electricity" value="No" required="true"> No
+            </label>
+        </div>
+    </div>
+    <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Parking</label>
+        <div class="col-lg-6">
+            <label class="checkbox-inline">
+                <input type="radio" id="parking" name="parking" value="Yes" required="true"> Yes &nbsp;&nbsp;
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" id="Parking" name="parking" value="No" required="true"> No
+            </label>
+        </div>
+    </div>
+    <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Refregerator</label>
+        <div class="col-lg-6">
+            <label class="checkbox-inline">
+                <input type="radio" id="refregerator" name="refregerator" value="Yes" required="true"> Yes
+                &nbsp;&nbsp;
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" id="Refregerator" name="refregerator" value="No" required="true"> No
+            </label>
+        </div>
+    </div>
+    <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Full Furnished</label>
+        <div class="col-lg-6">
+            <label class="checkbox-inline">
+                <input type="radio" id="furnished" name="furnished" value="Yes" required="true"> Yes
+                &nbsp;&nbsp;
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" id="Furnished" name="furnished" value="No"> No
+            </label>
+        </div>
+    </div>
+    <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">AC</label>
+        <div class="col-lg-6">
+            <label class="checkbox-inline">
+                <input type="radio" id="ac" name="ac" value="Yes" required="true"> Yes &nbsp;&nbsp;
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" id="Ac" name="ac" value="No"> No
+            </label>
+        </div>
+    </div>
+    <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Balcony</label>
+        <div class="col-lg-6">
+            <label class="checkbox-inline">
+                <input type="radio" id="balcony" name="balcony" value="Yes" required="true"> Yes &nbsp;&nbsp;
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" id="Balcony" name="balcony" value="No" required="true"> No
+            </label>
+        </div>
+    </div>
+    <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Table/Study Lamp</label>
+        <div class="col-lg-6">
+            <label class="checkbox-inline">
+                <input type="radio" id="table" name="table" value="Yes" required="true"> Yes &nbsp;&nbsp;
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" id="Table" name="table" value="No"> No
+            </label>
+        </div>
+    </div>
+    <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Laundry</label>
+        <div class="col-lg-6">
+            <label class="checkbox-inline">
+                <input type="radio" id="laundry" name="laundry" value="Yes" required="true"> Yes &nbsp;&nbsp;
+            </label>
+
+            <label class="checkbox-inline">
+                <input type="radio" id="Laundry" name="laundry" value="No"> No
+            </label>
+        </div>
+    </div>
+    <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Security</label>
+        <div class="col-lg-6">
+            <label class="checkbox-inline">
+                <input type="radio" id="security" name="security" value="Yes" required="true"> Yes &nbsp;&nbsp;
+            </label>
+            <label class="checkbox-inline">
+                <input type="radio" id="Security" name="security" value="No"> No
+            </label>
+        </div>
+    </div>
+    <hr />
+    <div class="form-group has-success d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess"
+            style="text-align: center; color: red; font-size: 25px;">Meals</label>
+
+    </div>
+    <div class="form-group d-flex flex-row mt-4">
+        <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Choose a meal option for PG</label>
+        <div class="col-lg-6">
+            <label class="radio-inline">
+                <input type="radio" name="mealOption" value="Breakfast" id="breakfast"> Breakfast
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="mealOption" value="Lunch" id="lunch"> Lunch
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="mealOption" value="Dinner" id="dinner"> Dinner
+            </label>
+        </div>
+    </div>
+    
+      <hr />
+      <div class="form-group">
+        <div class="col-lg-offset-3 col-lg-6">
+          <button class="btn btn-primary" id="book">Book</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,34 @@
+#Mobile:invalid {
+    border: 2px solid red;
+}
+
+#Mobile:valid {
+    border: 2px solid green;
+}
+
+#UserName:invalid {
+    border: 2px solid red;
+}
+#UserName:valid {
+    border: 2px solid green;
+}
+
+#Password:invalid {
+    border: 2px solid red;
+}
+
+#Password:valid {
+    border: 2px solid green;
+}
+
+#Email:invalid {
+    border: 2px solid red;
+}
+
+#Email:valid {
+    border: 2px solid green;
+}
+.list:hover
+{
+        background-color:black;
+}

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PgOwnerRegister</title>
+    <link rel="stylesheet" href="/PBL_PROJECT/src/uservalidation.css" />
+    <link
+      rel="stylesheet"
+      href="/node_modules/bootstrap-icons/font/bootstrap-icons.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/node_modules/bootstrap/dist/css/bootstrap.css"
+    />
+    <link rel="stylesheet" href="/PBL_PROJECT/src/uservalidation.css" />
+    <script src="/node_modules/jquery/dist/jquery.js"></script>
+    <script src="/node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+    <script src="/node_modules/jquery.cookie/jquery.cookie.js"></script>
+    <style></style>
+    <script>
+      $(function () {
+        home();
+        function home() {
+          if ($.cookie("OwnerId") != undefined) {
+            $.ajax({
+              method: "GET",
+              url: "PgOwnerdetails.html",
+            }).then(function (respone) {
+              $("#bodycontainer").html(respone);
+              $(`
+                                                        <div><h4> ${$.cookie(
+                                                          "OwnerId"
+                                                        )}</h4>
+                                                         </div>
+                                                        `).prependTo(
+                "#ownername"
+              );
+              $.ajax({
+                method: "GET",
+                url: "PgOwnerForm.html",
+              }).then(function (respone) {
+                $("#displaymenu").html(respone);
+              });
+              $("#managepgdetails").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
+                $.ajax({
+                  method: "GET",
+                  url: "PgOwnermanagepg.html",
+                })
+                .then(function (respone) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                $("#displaymenu").html(respone);
+                })
+              });
+              $("#linkAddform").click(function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $.ajax({
+                        method: "GET",
+                        url: "PgOwnerForm.html",
+                        })
+                        .then(function (respone) {
+                        e.preventDefault();
+                        e.stopPropagation();
+
+                        $("#displaymenu").html(respone);
+                        })
+              });
+              $("#bookingdetails").click(function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                $.ajax({
+                  method: "GET",
+                  url: "PgOwnerBooking.html",
+                })
+                .then(function (respone) {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  $("#displaymenu").html(respone);
+                })
+              });
+              // $("#home").click(function (e) {
+              //   e.preventDefault();
+              //   e.stopPropagation();
+              //   $.ajax({
+              //     method: "GET",
+              //     url: "PgOwnerDashboard.html",
+              //   }).then(function (respone) {
+              //     e.preventDefault();
+              //     e.stopPropagation();
+              //     $("#displaymenu").html(respone);
+              //   })
+              // });
+            });
+          }
+        }
+
+        $("#btnloginnext").click(function () {
+          $.ajax({
+            method: "GET",
+            url: "PgOwnerLogin.html",
+          }).then(function (respone) {
+            $("#bodycontainer").html(respone);
+            $("#btnlogin").click(function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              var username = $("#UserNameL").val();
+              var password = $("#PasswordL").val();
+              $.ajax({
+                method: "GET",
+                url: "http://127.0.0.1:4400/getOwners",
+                success: function (data) {
+                  var user = data.find((u) => u.UserName == username);
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (user.UserName == username && user.Password == password) {
+                    $.cookie("OwnerId", user.UserName);
+                    if($.cookie("pgName")!=undefined)
+                    {
+                      $.removeCookie("pgName");
+                    }
+                   
+                    if(user.forms!=undefined)
+                    {
+                       $.cookie("pgName",user.forms.PgName);
+                    }
+
+                    $("#btnlogin").prop("disabled", true);
+                    $("#modallogin").prop("disabled", true);
+                    alert("login successfully");
+                    $("#UserNameL").val("");
+                    $("#PasswordL").val("");
+
+                    $.ajax({
+                      method: "GET",
+                      url: "PgOwnerdetails.html",
+                    })
+                    .then(function (respone) {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      $("#bodycontainer").html(respone);
+                      $(`
+                                                        <div><h4> ${$.cookie(
+                                                          "OwnerId"
+                                                        )}</h4>
+                                                         </div>
+                                                        `).prependTo(
+                "#ownername"
+              );
+                    
+                      $.ajax({
+                        method: "GET",
+                        url: "PgOwnerForm.html",
+                      }).then(function (respone) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $("#displaymenu").html(respone);
+                      });
+                      $("#linkAddform").click(function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $.ajax({
+                          method: "GET",
+                          url: "PgOwnerForm.html",
+                        }).then(function (respone) {
+                          e.preventDefault();
+                          e.stopPropagation();
+
+                          $("#displaymenu").html(respone);
+                          // var Owner=$.cookie("OwnerId");
+                          // $("#OwnerName").val(`${Owner}`);
+                        })
+                      });
+                      // $("#opendashboard").click(function (e) {
+                      //   e.preventDefault();
+                      //   e.stopPropagation();
+                      //   $.ajax({
+                      //     method: "GET",
+                      //     url: "PgOwnerDashboard.html",
+                      //   }).then(function (respone) {
+                      //     e.preventDefault();
+                      //     e.stopPropagation();
+                      //     $("#displaymenu").html(respone);
+                      //   });
+                      // });
+                      $("#managepgdetails").click(function (e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $.ajax({
+                          method: "GET",
+                          url: "PgOwnermanagepg.html",
+                        }).then(function (respone) 
+                        {
+                          e.preventDefault();
+                        e.stopPropagation();
+                          $("#displaymenu").html(respone);
+                        })
+                      });
+                      $("#bookingdetails").click(function (e) 
+                      {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $.ajax({
+                          method: "GET",
+                          url: "PgOwnerBooking.html",
+                        }).then(function (respone) {
+                          e.preventDefault();
+                        e.stopPropagation();
+                          $("#displaymenu").html(respone);
+                        })
+                      });
+                  });
+                  } else {
+                    alert("invalid password / UserName");
+                  }
+                },
+              });
+            });
+            $("#back").click(function () {
+              $.ajax({
+                method: "GET",
+                url: "PgOwnerRegister.html",
+              }).then(function (respone) {
+                $("#bodycontainer").html(respone);
+              });
+            });
+          });
+        });
+        $("#btnregister").click(function () {
+          if (formvalidation() == true) {
+            var userdata = {
+              UserName: $("#UserName").val(),
+              Password: $("#Password").val(),
+              Mobile: $("#Mobile").val(),
+              Email: $("#Email").val(),
+            };
+            $.ajax({
+              method: "POST",
+              url: "http://127.0.0.1:4400/registerOwner",
+              data: userdata,
+            });
+            alert("Register successfully");
+            $("#UserName").val("");
+            $("#Password").val("");
+            $("#Mobile").val("");
+            $("#Email").val("");
+          }
+        });
+        function formvalidation() {
+          var UserName = $("#UserName").val();
+          var Password = $("#Password").val();
+          var Mobile = $("#Mobile").val();
+          var Email = $("#Email").val();
+          var rgx = /^[a-zA-Z0-9]+$/;
+          if (!rgx.test(UserName)) {
+            alert("Enter valid username format");
+            return false;
+          }
+          rgx =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+          if (!rgx.test(Password)) {
+            alert("Enter the correct password format");
+            return false;
+          }
+          rgx = /[0-9]{10}/;
+          if (!rgx.test(Mobile)) {
+            alert("Enter the 10 digit mobile no");
+            return false;
+          }
+          rgx = /[a-zA-Z0-9._%+-]+@gmail\.com$/;
+          if (!rgx.test(Email)) {
+            alert("Enter the correct Email format");
+            return false;
+          }
+          return true;
+        }
+        $("#UserName").keyup(function () {
+          var user = $("#UserName").val();
+          $.ajax({
+            method: "GET",
+            url: "http://127.0.0.1:4400/getOwners",
+            success: function (data) {
+              for (var value of data) {
+                if (user == value.UserName) {
+                  $("#userError")
+                    .html("UserName already taken")
+                    .css("color", "red");
+                  return;
+                } else {
+                  $("#userError")
+                    .html("UserName is available")
+                    .css("color", "green");
+                }
+              }
+            },
+          });
+        });
+
+        $("#UserName").blur(function () {
+          $("#userError").hide();
+        });
+      });
+    </script>
+  </head>
+
+  <body class="container-fluid" id="bodycontainer">
+    <div class="d-flex justify-content-center">
+      <div style="width: 450px" class="border border-2 p-4 mt-5">
+        <h2>OWNER REGISTRATION</h2>
+        <dl>
+          <dt>User Name</dt>
+          <dd class="input-group-text">
+            <span class="bi bi-person"></span
+            ><input
+              type="text"
+              class="form-control"
+              id="UserName"
+              name="username1"
+              required
+              placeholder="Enter the username (only letters and numbers)"
+              pattern="^[a-zA-Z0-9]+$"
+              minlength="4"
+            />
+          </dd>
+          <p id="userError"></p>
+
+          <dt>Password</dt>
+          <dd class="input-group-text">
+            <span class="bi bi-lock"></span
+            ><input
+              type="password"
+              class="form-control"
+              id="Password"
+              name="password1"
+              required
+              placeholder="Enter the password"
+              pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$"
+            />
+          </dd>
+          <p id="pass">
+            Password must contain at least 8 characters, including one uppercase
+            letter, one number,one special character
+          </p>
+          <dt>Mobile no</dt>
+          <dd class="input-group-text">
+            <span class="bi bi-phone"></span
+            ><input
+              type="text"
+              class="form-control"
+              id="Mobile"
+              name="mobile1"
+              required
+              placeholder="Enter the mobile no"
+              pattern="[0-9]{10}"
+            />
+          </dd>
+          <dt>Email</dt>
+          <dd class="input-group-text">
+            <span class="bi bi-laptop"></span
+            ><input
+              type="email"
+              class="form-control"
+              id="Email"
+              name="email1"
+              required
+              placeholder="Enter the Email id"
+              pattern="[a-zA-Z0-9._%+-]+@gmail\.com$"
+            />
+          </dd>
+          <p>eg:xyz@gmail.com</p>
+        </dl>
+        <div class="d-flex justify-content-between">
+          <button class="btn btn-primary" id="btnregister">Reigster</button>
+          <button class="btn btn-success" id="btnloginnext">LOGIN</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

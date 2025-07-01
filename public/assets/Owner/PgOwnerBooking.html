@@ -1,0 +1,92 @@
+
+<script>
+$(document).ready(function() {
+    console.log('Document ready. Loading booking details...');
+
+    // Call bookingupdate() function when the document is ready
+    bookingupdate();
+
+    function bookingupdate() {
+        const ownerId = $.cookie("OwnerId");
+        console.log('OwnerId:', ownerId);
+
+        $.ajax({
+            method: 'GET',
+            url: `http://127.0.0.1:4400/getpgbookingdetails?ownerId=${ownerId}`,
+            success: function(data) {
+                var htmlContent = '';
+                data.bookings.forEach(function(booking) {
+                    htmlContent += `
+                        <tr class="p-3">
+                            <td>${booking.UserName}</td>
+                            <td>${booking.Email}</td>
+                            <td>${booking.Mobile}</td>
+                            <td class="d-flex justify-content-around">
+                                <button class="btn btn-primary accept" data-id="${booking.requestId}" data-value="true">Accept</button>
+                                <button class="btn btn-danger reject" data-id="${booking.requestId}" data-value="false">Reject</button>
+                            </td>
+                        </tr>`;
+                });
+                $('#booking').html(htmlContent);
+            },
+            error: function(error) {
+                console.error('Error fetching booking details:', error);
+                // Handle error if needed
+            }
+        });
+    }
+
+    // Add click event handlers for accept and reject buttons
+    $(document).on('click', '.accept, .reject', function() {
+        const requestId = $(this).data('id');
+        const value = $(this).data('value');
+        const ownerId = $.cookie("OwnerId");
+        
+        console.log('Button clicked - Request ID:', requestId);
+        console.log('Button clicked - Value:', value);
+        console.log('Button clicked - OwnerId:', ownerId);
+
+        if (confirm('Are you sure you want to proceed with this action?')) {
+            const url = `http://127.0.0.1:4400/requests/${requestId}?state=${value}&OwnerId=${ownerId}`;
+            console.log('AJAX URL:', url);
+
+            $.ajax({
+                method: 'POST',
+                url: url,
+                success: function(response) {
+                    console.log('Request processed successfully:', response);
+                    bookingupdate(); // Reload booking details after processing request
+                },
+                error: function(error) {
+                    console.error('Error processing request:', error);
+                    // Handle error if needed
+                }
+            });
+        } else {
+            console.log('Action canceled by user');
+        }
+    });
+});
+
+</script>
+
+<body class="p-3">
+  <div class="border border-5 p-5" style="background-color: rgb(143, 216, 216)">
+    <h3
+      class="d-flex justify-content-center align-content-center p-2"
+      style="font-weight: bold; background-color: rgb(151, 249, 249)"
+    >
+      Booking Request
+    </h3>
+    <br />
+    <table width="100%" style="background-color: white" class="p-3">
+      <thead style="font-style: italic; font-size: 25px" class="mb-5">
+        <th>Name</th>
+        <th>Email Address</th>
+        <th>Mobile</th>
+        <th>Action</th>
+      </thead>
+      <tbody id="booking" class="p-3"></tbody>
+    </table>
+  </div>
+</body>

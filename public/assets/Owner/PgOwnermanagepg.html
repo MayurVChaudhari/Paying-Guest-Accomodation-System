@@ -1,0 +1,112 @@
+<script>
+  $(function()
+{
+
+  $(document).ready(function() {
+            // Call update() function when the document is ready
+            update();
+        });
+       
+        function update() {
+            $.ajax({
+                method: 'GET',
+                url: 'http://127.0.0.1:4400/getpgdetails',
+                success: function(data) {
+                    var htmlContent = '';
+
+                    for (var value of data) {
+                        if (value.UserName == $.cookie('OwnerId') && value.forms != undefined) {
+                            htmlContent += `
+                                <tr class="p-3">
+                                    <td>${value.forms.PgName}</td>
+                                    <td>${value.forms.Address}</td>
+                                    <td>${value.forms.Location}</td>
+                                    <td>${value.forms.RPmonth}</td>
+                                    <td class="d-flex justify-content-around">
+                                        <button class="btn btn-primary editdetails">Edit Details</button>
+                                        <button class="btn btn-danger deleteForm">Delete</button>
+                                    </td>
+                                </tr>`;
+                        }
+                    }
+
+                    $('#managepg').html(htmlContent);
+                }
+            });
+        }
+    $(document).on('click', '.editdetails', function() {
+      // Perform AJAX call to load PgOwnerFormupdate.html
+      $.ajax({
+        method: 'GET',
+        url: 'PgOwnerFormUpdate.html',
+        success: function(response) {
+          // Display the loaded HTML content in the 'displaymenu' element
+          $('#displaymenu').html(response);
+        },
+        error: function(error) {
+          console.error('Error loading form update:', error);
+          // Handle error scenario (e.g., show error message to user)
+        }
+      });
+    });
+
+
+   $(document).on('click', '.deleteForm', function() {
+  var ownerId = $.cookie("OwnerId");
+  var ownerdata = {
+    "OwnerId": ownerId
+  };
+
+  if (confirm('Are you sure you want to delete this form?')) {
+    $.ajax({
+      method: 'POST',
+      url: 'http://127.0.0.1:4400/deleteForm',
+      data: ownerdata,
+      success: function(response) {
+        alert('Form deleted successfully');
+        update(); // Refresh the displayed data after deletion
+      },
+      error: function(error) {
+        console.error('Error deleting form:', error);
+        // Handle error scenario (e.g., show error message to user)
+      }
+    });
+  } else {
+    // Do nothing if user cancels deletion
+  }
+});
+
+
+})
+   
+
+
+
+
+     
+
+
+</script>
+<body class="p-3">
+  <div class="border border-5 p-5" style="background-color: rgb(143, 216, 216)">
+    <h3
+      class="d-flex justify-content-center align-content-center p-2"
+      style="font-weight: bold; background-color: rgb(151, 249, 249)"
+    >
+      PAYING GUEST DETAILS
+    </h3>
+    <br />
+    <table width="100%" style="background-color: white" class="p-3">
+      <thead style="font-style: italic; font-size: 25px" class="mb-5">
+        <th>PgName</th>
+        <th>Address</th>
+        <th>Location</th>
+        <th>Rent</th>
+        <th>Action</th>
+      </thead>
+      <tbody id="managepg" class="p-3">
+
+      </tbody>
+    </table>
+  </div>
+</body>

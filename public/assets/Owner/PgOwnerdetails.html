@@ -1,0 +1,50 @@
+<script>
+    $(function (){
+        $("#home").click(function()
+        {
+            
+            location.href = "../index.html";
+        })
+
+        $("#ownerbtnlogout").click(function()
+        {
+            
+            $.removeCookie("OwnerId");
+            $.removeCookie("pgName");
+           
+            location.href = "PgOwnerRegister.html";
+        })
+    })
+</script>
+<div class="container-fluid "  style="display: grid; grid-template-columns: 2fr 10fr; margin-left:-35px;">
+    <div style=" height:730px; background-color:gray; width:300px;">
+        <ul style="list-style-type: none;" class="mt-3" >
+            <li id="ownername" style="display:flex; justify-content: center;">
+                <div>
+                    &nbsp;&nbsp;
+                    <button class="btn btn-secondary" id="ownerbtnlogout">LOGOUT</button>
+                </div>
+                   
+            </li>
+            <br><br>
+            <li style="text-decoration: none;">
+                <h1><span class="bi bi-person">&nbsp;OWNER</span></h1>
+            </li><br>
+            <li style="height:70px;width:100%;" class="list" id="home">
+                <a href='#' style="text-decoration:none;"><h4 class="bi bi-house-door-fill text-white p-3"> &nbsp;Home</h4></a>
+            </li>
+            <li style="height:70px; width:100%;" class="list" id="linkAddform">
+                <a href="#" style="text-decoration: none;"><h4 class="bi bi-database-add text-white p-3"> &nbsp;Add PG</h4></a>
+            </li>
+            <li style="height:70px; width:100%;" class="list" id="managepgdetails">
+                <a href="#" style="text-decoration:none;"><h4 class="bi bi-database-up text-white p-3"> &nbsp;Manage PG</h4></a>
+            </li>
+            <li style="height:70px; width:100%;" class="list" id="bookingdetails" >
+                <a href="#" style="text-decoration:none;"><h4 class="bi bi-database-check text-white p-3" > &nbsp;Booking Request</h4></a>
+            </li>
+        </ul>
+    </div>
+    <div id="displaymenu">
+
+    </div>
+</div>

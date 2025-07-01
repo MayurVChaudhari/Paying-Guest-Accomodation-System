@@ -1,0 +1,341 @@
+<script>
+    $(document).ready(function() {
+        // Call the function to populate the form with PG details
+        populatePgDetails();
+
+        // Event handler for form submission
+        $("#formupdate").click(function (event) {
+            event.preventDefault(); // Prevent the default form submission
+            
+            var formdata = {
+                "OwnerName": $.cookie("OwnerId"),
+                "PgName": $("#pgName").val(),
+                "PgType": $("input[name='typepg']:checked").val(),
+                "Location": $("#Location").val(),
+                "RPmonth": $("#rpmonth").val(),
+                "Rooms": $("#norooms").val(),
+                "Address": $("#address").val(),
+                "Roomimage": $("#roomimages").val(),
+                "Electricity": $("input[name='electricity']:checked").val(),
+                "Parking": $("input[name='parking']:checked").val(),
+                "Refregerator": $("input[name='refregerator']:checked").val(),
+                "Furnished": $("input[name='furnished']:checked").val(),
+                "Ac": $("input[name='ac']:checked").val(),
+                "Balcony": $("input[name='balcony']:checked").val(),
+                "Table": $("input[name='table']:checked").val(),
+                "Laundry": $("input[name='laundry']:checked").val(),
+                "Security": $("input[name='security']:checked").val(),
+                "Meals": $("input[name='mealOption']:checked").val(),
+               
+            };
+
+            // Make a POST request to submit the updated form data
+            $.ajax({
+                method: "POST",
+                url: "http://127.0.0.1:4400/submitform",
+                data: formdata,
+                success: function(response) {
+                    alert("Form updated successfully");
+                    $.ajax({
+                    method: "GET",
+                    url: "PgOwnermanagepg.html"
+                })
+                    .then(function (respone) {
+
+                        $("#displaymenu").html(respone);
+                    })
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error submitting form:", error);
+                    alert("Error submitting form. Please try again.");
+                }
+            });
+        });
+
+        function populatePgDetails() {
+    $.ajax({
+        method: "GET",
+        url: "http://127.0.0.1:4400/getpgdetails",
+        success: function(data) {
+            // Assuming 'data' is an array of objects representing PG details
+            for (var value of data) {
+                if (value.UserName===$.cookie("OwnerId")  &&  value.forms !== undefined && value.forms.PgName === $.cookie("pgName")  ) 
+                {
+                    
+                    $("#pgName").val(value.forms.PgName);
+
+                    // Populate Type of PG radio buttons
+                    
+                    $("#typepg_boys").prop('checked', value.forms.PgType === 'Boys');
+                    $("#typepg_girls").prop('checked', value.forms.PgType === 'Girls');
+                    $("#typepg_both").prop('checked', value.forms.PgType === 'Both');
+                    // Populate Location select
+                    var location = value.forms.Location;
+                    $("#city").val(location);
+
+                    // Populate Rent Per Month input
+                    $("#rpmonth").val(value.forms.RPmonth);
+                    $("#norooms").val(value.forms.Rooms);
+
+                    // Populate Address textarea
+                    $("#address").val(value.forms.Address);
+
+                    // Populate Facilities checkboxes
+                      // Handle "No" values for Facilities checkboxes
+                      $("#electricity").prop('checked', value.forms.Electricity === 'No');
+                    $("#parking").prop('checked', value.forms.Parking === 'No');
+                    $("#refregerator").prop('checked', value.forms.Refregerator === 'No');
+                    $("#furnished").prop('checked', value.forms.Furnished === 'No');
+                    $("#ac").prop('checked', value.forms.Ac === 'No');
+                    $("#balcony").prop('checked', value.forms.Balcony === 'No');
+                    $("#table").prop('checked', value.forms.Table === 'No');
+                    $("#laundry").prop('checked', value.forms.Laundry === 'No');
+                    $("#security").prop('checked', value.forms.Security === 'No');
+                  
+
+
+
+                    $("#Electricity").prop('checked', value.forms.Electricity === 'Yes');
+                    $("#Parking").prop('checked', value.forms.Parking === 'Yes');
+                    $("#Refregerator").prop('checked', value.forms.Refregerator === 'Yes');
+                    $("#Furnished").prop('checked', value.forms.Furnished === 'Yes');
+                    $("#Ac").prop('checked', value.forms.Ac === 'Yes');
+                    $("#Balcony").prop('checked', value.forms.Balcony === 'Yes');
+                    $("#Table").prop('checked', value.forms.Table === 'Yes');
+                    $("#Laundry").prop('checked', value.forms.Laundry === 'Yes');
+                    $("#Security").prop('checked', value.forms.Security === 'Yes');
+
+                  
+
+                    // Populate Meals checkboxes
+                    $("#breakfast").prop('checked', value.forms.Meals === 'Breakfast');
+                    $("#lunch").prop('checked', value.forms.Meals === 'Lunch');
+                    $("#dinner").prop('checked', value.forms.Meals === 'Dinner');
+                    
+                }
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching PG details:", error);
+        }
+    });
+}
+
+
+
+});
+
+    
+
+
+</script>
+<body class="container-fluid">
+    <div class="d-flex justify-content-center p-5 overflow-scroll " style="height:700px;">
+        <div style="width: 800px;">
+            <h2 style="text-align:center; background-color: aqua;">LIST YOUR PG</h2>
+            <form method="" style="background-color: rgb(255, 243, 230);" class="p-5">
+                <div class="form-group d-flex flex-row mt-5">
+                    <label class="col-sm-3 control-label">PG Name</label>
+                    <div class="col-sm-6">
+                        <input type="text" name="pgname" class="form-control" required="true" id="pgName">
+                    </div>
+                </div>
+    
+    
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Type of PG</label>
+                    <div class="col-lg-6">
+                        <label class="checkbox-inline">
+                            <input type="radio" id="typepg_boys" name="typepg" value="Boys" required="true"> Boys &nbsp;&nbsp;
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" id="typepg_girls" name="typepg" value="Girls"> Girls
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" id="typepg_both" name="typepg" value="Both"> Both
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Choose location</label>
+                    <div class="col-lg-6">
+                        <select class="form-control m-bot15" name="city" id="Location" required="true" placeholder="Choose your location">
+                            <option value="Bibvewadi">Bibvewadi</option>
+                            <option value="Swargate">Swargate</option>
+                            <option value="Katraj">Katraj</option>
+                            <option value="Kondhwa">Kondhwa</option>
+                            <option value="Camp Area (Pune Cantonment)">Camp Area (Pune Cantonment)</option>
+                        </select>
+    
+    
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label">Rent Per Month</label>
+                    <div class="col-sm-6">
+                        <input class="form-control" id="rpmonth" name="rpmonth" type="text" required="true" >
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label">Number of Rooms</label>
+                    <div class="col-sm-6">
+                        <input type="text" class="form-control" name="norooms" id="norooms" required="true" >
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label">Address</label>
+                    <div class="col-sm-6">
+                        <textarea type="text" class="form-control" name="address" id="address"
+                            required="true"></textarea>
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class=" col-sm-3 control-label">Pictures</label>
+                    <div class="col-lg-6">
+                        <input type="file" class="form-control" name="roomimages" id="roomimages" >
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group has-success d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess"
+                        style="text-align: center; color: red ;font-size:25px;">Facilities</label>
+    
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Electricity</label>
+                    <div class="col-lg-6">
+                        <label class="checkbox-inline">
+                            <input type="radio" id="electricity" name="electricity" value="Yes" required="true"> Yes
+                            &nbsp;&nbsp;
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" id="Electricity" name="electricity" value="No" required="true"> No
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Parking</label>
+                    <div class="col-lg-6">
+                        <label class="checkbox-inline">
+                            <input type="radio" id="parking" name="parking" value="Yes" required="true"> Yes &nbsp;&nbsp;
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" id="Parking" name="parking" value="No" required="true"> No
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Refregerator</label>
+                    <div class="col-lg-6">
+                        <label class="checkbox-inline">
+                            <input type="radio" id="refregerator" name="refregerator" value="Yes" required="true"> Yes
+                            &nbsp;&nbsp;
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" id="Refregerator" name="refregerator" value="No" required="true"> No
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Full Furnished</label>
+                    <div class="col-lg-6">
+                        <label class="checkbox-inline">
+                            <input type="radio" id="furnished" name="furnished" value="Yes" required="true"> Yes
+                            &nbsp;&nbsp;
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" id="Furnished" name="furnished" value="No"> No
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">AC</label>
+                    <div class="col-lg-6">
+                        <label class="checkbox-inline">
+                            <input type="radio" id="ac" name="ac" value="Yes" required="true"> Yes &nbsp;&nbsp;
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" id="Ac" name="ac" value="No"> No
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Balcony</label>
+                    <div class="col-lg-6">
+                        <label class="checkbox-inline">
+                            <input type="radio" id="balcony" name="balcony" value="Yes" required="true"> Yes &nbsp;&nbsp;
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" id="Balcony" name="balcony" value="No" required="true"> No
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Table/Study Lamp</label>
+                    <div class="col-lg-6">
+                        <label class="checkbox-inline">
+                            <input type="radio" id="table" name="table" value="Yes" required="true"> Yes &nbsp;&nbsp;
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" id="Table" name="table" value="No"> No
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Laundry</label>
+                    <div class="col-lg-6">
+                        <label class="checkbox-inline">
+                            <input type="radio" id="laundry" name="laundry" value="Yes" required="true"> Yes &nbsp;&nbsp;
+                        </label>
+    
+                        <label class="checkbox-inline">
+                            <input type="radio" id="Laundry" name="laundry" value="No"> No
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Security</label>
+                    <div class="col-lg-6">
+                        <label class="checkbox-inline">
+                            <input type="radio" id="security" name="security" value="Yes" required="true"> Yes &nbsp;&nbsp;
+                        </label>
+                        <label class="checkbox-inline">
+                            <input type="radio" id="Security" name="security" value="No"> No
+                        </label>
+                    </div>
+                </div>
+                <hr />
+                <div class="form-group has-success d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess"
+                        style="text-align: center; color: red; font-size: 25px;">Meals</label>
+    
+                </div>
+                <div class="form-group d-flex flex-row mt-4">
+                    <label class="col-sm-3 control-label col-lg-3" for="inputSuccess">Choose a meal option for PG</label>
+                    <div class="col-lg-6">
+                        <label class="radio-inline">
+                            <input type="radio" name="mealOption" value="Breakfast" id="breakfast"> Breakfast
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="mealOption" value="Lunch" id="lunch"> Lunch
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio" name="mealOption" value="Dinner" id="dinner"> Dinner
+                        </label>
+                    </div>
+                </div>
+                
+    
+                <hr />
+                <div class="form-group">
+                    <div class="col-lg-offset-3 col-lg-6">
+                        <button class="btn btn-primary" type="submit" name="submit" id="formupdate">update</button>
+                    </div>
+                </div>
+    
+            </form>
+        </div>
+    
+    </div>
+</body>
